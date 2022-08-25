@@ -1,0 +1,117 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="Administration.SiteMaster" %>
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- TITLE -->
+    <title></title>
+
+    <!-- HEAD -->
+    <asp:ContentPlaceHolder ID="Head" runat="server">
+    </asp:ContentPlaceHolder>
+
+    <!-- BOOTSTRAP -->
+    <link href="Content/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- DATA TABLES -->
+    <link href="//cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+    <!-- CUSTOM CSS -->
+    <style>
+        fieldset {
+            border: 1px solid #ced4da;
+            padding: inherit;
+            border-radius: 4px;
+        }
+
+            fieldset > legend {
+                float: initial;
+                width: auto;
+                padding: revert;
+                font-size: initial;
+                margin: 0;
+            }
+    </style>
+
+</head>
+<body>
+    <form id="Web_app" runat="server">
+        <nav class='navbar navbar-expand-lg navbar-light bg-light'>
+            <div class='container-fluid'>
+                <a class='navbar-brand' href='/Default'>RWA Apartments Admin</a>
+                <button class='navbar-toggler' type='button' data-bs-toggle='collapse' data-bs-target='#navbarSupportedContent' aria-controls='navbarSupportedContent' aria-expanded='false' aria-label='Toggle navigation'>
+                    <span class='navbar-toggler-icon'></span>
+                </button>
+                <div class='collapse navbar-collapse' id='navbarSupportedContent'>
+                    <ul class='navbar-nav me-auto mb-2 mb-lg-0 w-100'>
+                        <% if (Session["user"] == null)
+                            { %>
+                        <li class='nav-item'>
+                            <a class='nav-link' href='/Login' runat="server">Login</a>
+                        </li>
+                        <li class='nav-item'>
+                            <a class='nav-link' href='/Registration' runat="server">Registration</a>
+                        </li>
+                        <% }
+                        else
+                        { %>
+                        <li class='nav-item'>
+                            <a class='nav-link' href="/Default" runat="server">Apartments</a>
+                        </li>
+                        <li class='nav-item'>
+                            <a class='nav-link' href='/Tags' runat="server">Tags</a>
+                        </li>
+                        <li class='nav-item'>
+                            <a class='nav-link' href='/Users' runat="server">Registered users</a>
+                        </li>
+
+                        <% }  %>
+                    </ul>
+
+                    <% if (Session["user"] != null)
+                        { %>
+                    <ul class='navbar-nav d-flex justify-content-end' >
+                        <li>
+                            <asp:Label runat="server" ID="userIdentity" CssClass="d-flex align-self-center p-2"></asp:Label>
+                        </li>
+                        <li class='nav-item'>
+                            <asp:Button class='nav-link btn btn-danger text-white' OnClick="btnLogout_Click" ID="btnLogout" runat="server" Text="Logout" />
+                        </li>
+                    </ul>
+                    <% }  %>
+                </div>
+            </div>
+        </nav>
+        <div>
+            <asp:ContentPlaceHolder ID="Content" runat="server">
+            </asp:ContentPlaceHolder>
+
+        </div>
+        <hr class='mt-4'>
+        <div class='text-center'>
+            <p>RWA-Apartments Admin <%: DateTime.Now.Year %> &copy;</p>
+        </div>
+    </form>
+
+    <!-- JQUERY -->
+    <script src="Scripts/jquery-3.6.0.min.js"></script>
+
+    <!-- DATA TABLES -->
+    <script src="//cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs/dt-1.10.13/r-2.1.1/sc-1.4.2/datatables.min.js"></script>
+    <link href="~/Scripts/JqueryDatatable/Datatable.css" rel="stylesheet" />
+    <script src="~/Scripts/JqueryDatatable/DataTable.js"></script>
+
+    <!-- BOOTSTRAP -->
+    <script src="Scripts/bootstrap.min.js"></script>
+    <script src="//cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready( function () {
+            $('#myTable').DataTable();
+        });
+    </script>
+</body>
+</html>

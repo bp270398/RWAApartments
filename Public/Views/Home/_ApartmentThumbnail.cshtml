@@ -1,0 +1,67 @@
+﻿@model Public.Models.View_Model.ApartmentVM
+
+
+<div class="card">
+    <!--    TODO !!!    -->
+    <div class="card-header">
+
+        <img src="" alt="Image" />
+
+        <div class="d-flex justify-content-between">
+            <div style="width:fit-content;">
+                <h5 class="card-title">
+                    @Html.Label(Model.Apartment.NameEng)
+                </h5>
+            </div>
+            @if (Model.Rating != 0)
+            {
+                <div>
+                    @Html.Label(Model.Rating + "/5", new { @class = "badge rounded-pill bg-warning text-dark p-2 m-1 ", @style = "width:fit-content;" })
+                </div>
+            }
+            else if (Model.Reviews.Count() == 0)
+            {
+                <div>
+                    @Html.Label("New", new { @class = "badge rounded-pill bg-success text-light p-2 m-1 ", @style = "width:fit-content;" })
+                </div>
+            }
+        </div>
+        <hr />
+    </div>
+    <div class="card-body">
+
+        <div class="card-text w-100">
+            <p>
+                @Html.Label("in " + Model.Apartment.City.Name)
+
+                @if (Model.Apartment.BeachDistance.HasValue)
+                {
+                    @Html.Label("... " + Model.Apartment.BeachDistance + " m from sea", new { @class = "text-secondary justify-content-end", @style = "font-size:smaller;" })
+                }
+                <br />
+                @if (Model.Apartment.MaxChildren == 0)
+                {
+                    @Html.Label(Model.Apartment.MaxAdults.ToString() + " adults")
+                }
+                else
+                {
+                    @Html.Label(Model.Apartment.MaxAdults.ToString() + " adults + " + Model.Apartment.MaxChildren.ToString() + " children")
+                }
+                <br />
+                @Html.Label(Model.Apartment.TotalRooms.ToString() + " rooms") <br />
+                <br />
+            </p>
+            <p class="text-end">
+                @Html.Label(Model.Apartment.Price.ToString(), new { @class = "h2 m-0" })<br />
+                @Html.Label(" EUR / night", new { @class = "m-0" })
+            </p>
+        </div>
+
+    </div>
+    <div class="card-footer align-items-end">
+        @Html.ActionLink(linkText:"Book now!", actionName:"Apartment", controllerName:"Apartment", routeValues: new { id = Model.Apartment.Id },htmlAttributes: new { @class = "btn btn-primary w-100" })
+
+    </div>
+</div>
+
+

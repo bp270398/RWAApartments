@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - RWA Apartments</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body class="m-0 p-0">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            @Html.ActionLink("RWA Apartments", "Index", "Home", null, new { @class = "navbar-brand" })
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ">
+                    <li class="nav-item">
+                        @Html.ActionLink("Search", "Index", "Home", new { @class = "nav-link" })
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("Contact", "Contact", "Home", new { @class = "nav-link" })
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("About us", "About", "Home", new { @class = "nav-link" })
+                    </li>
+                </ul>
+                <div class="d-flex justify-content-end">
+                    @if (Session["user"] != null)
+                    {
+                        ClassLibrary.Models.User user = (ClassLibrary.Models.User)Session["user"];
+                        @Html.ActionLink("Hello" + user.Username + "!", "Manage", "User", null, new { @class = "btn btn-outline mx-1" })
+                        @Html.ActionLink("Log out", "LogOut", "User", null, new { @class = "btn btn-danger mx-1" })
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Log in", "LogIn", "User", null, new { @class = "btn btn-outline mx-1" })
+                        @Html.ActionLink("Register", "Register", "User", null, new { @class = "btn btn-default mx-1" })
+                    }
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="container-fluid body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        </footer>
+    </div>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

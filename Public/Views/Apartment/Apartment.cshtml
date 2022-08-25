@@ -1,0 +1,220 @@
+﻿@model Public.Models.View_Model.ApartmentVM
+
+@{
+    ViewBag.Title = "Apartment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>
+    @ViewBag.Title
+    @if (Model.Reviews.Any())
+    {
+        @Html.Label(Model.Rating + "/5", new { @class = "badge text-bg-warning p-2 m-2", @style = "width:fit-content;" })
+    }
+</h2>
+
+<div class="container-fluid">
+    <div class="row">
+        <!--    info    -->
+        <div class="col-sm-5 col-lg-4  m-2">
+            <img src="@Url.Content(Model.Pictures.First().Path)" alt="Image" />
+            <p class="card-text">
+                @Html.Label("...in " + Model.Apartment.City.Name) <br />
+                @if (Model.Apartment.BeachDistance.HasValue && Model.Apartment.BeachDistance.Value != 0)
+                {
+                    @Html.Label(" " + Model.Apartment.BeachDistance + " m from sea") <br />
+
+                }
+                @if (Model.Apartment.MaxChildren == 0)
+                {
+                    @Html.Label(Model.Apartment.MaxAdults.ToString() + " adults")
+                }
+                else
+                {
+                    @Html.Label(Model.Apartment.MaxAdults.ToString() + " adults + " + Model.Apartment.MaxChildren.ToString() + " children")
+                }
+                <br />
+                @Html.Label(Model.Apartment.TotalRooms.ToString() + " rooms") <br />
+                <br />
+                @Html.Label("Owner:" + Model.Apartment.ApartmentOwner.Name)
+            </p>
+            <!--    price    -->
+            <p class="card-text text-end">
+                @Html.Label(Model.Apartment.Price.ToString(), new { @class = "h2 m-0" })<br />
+                @Html.Label(" EUR / night", new { @class = "m-0" })
+            </p>
+            <!--    tags    -->
+            <div class="container">
+                @foreach (var item in Model.Tags)
+                {
+                    @Html.Label(item.NameEng, new { @class = "badge bg-secondary m-1 p-2" })
+                }
+            </div>
+
+        </div>
+        <!--    contact    -->
+        <div class="col-sm-6 col-lg-4 m-2">
+
+            <div class="container">
+
+
+                <div class="card">
+                    <div class="card-header">
+                        @Html.Label("Fill out the form to book!")
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            @Html.Label("Contact us")
+                        </h5>
+                        <p class="card-text">
+                            @Html.BeginForm(actionName:"ContactForm",controllerName: "Apartment",routeValues: new { Model }, method:FormMethod.Post){
+                            }
+                            <div class="row">
+                                <div class="col">
+                                    @Html.LabelFor(m => m.ContactForm.FName)
+                                </div>
+                                <div class="col">
+                                    @Html.TextBoxFor(m => m.ContactForm.FName, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="row">
+                                @Html.ValidationMessageFor(model => model.ContactForm.FName)
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    @Html.LabelFor(m => m.ContactForm.LName)
+                                </div>
+                                <div class="col">
+                                    @Html.TextBoxFor(m => m.ContactForm.LName, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="row">
+                                @Html.ValidationMessageFor(model => model.ContactForm.LName)
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    @Html.LabelFor(m => m.ContactForm.Email)
+                                </div>
+                                <div class="col">
+                                    @Html.TextBoxFor(m => m.ContactForm.Email, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="row">
+                                @Html.ValidationMessageFor(model => model.ContactForm.Email)
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    @Html.LabelFor(m => m.ContactForm.PhoneNumber)
+                                </div>
+                                <div class="col">
+                                    @Html.TextBoxFor(m => m.ContactForm.PhoneNumber, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="row">
+                                @Html.ValidationMessageFor(model => model.ContactForm.PhoneNumber, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    @Html.LabelFor(m => m.ContactForm.Address)
+                                </div>
+                                <div class="col">
+                                    @Html.TextBoxFor(m => m.ContactForm.Address, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    @Html.LabelFor(m => m.ContactForm.Arrival)
+                                </div>
+                                <div class="col">
+                                    @Html.TextBoxFor(m => m.ContactForm.Arrival, "{0:dd.MM.yyyy.}", new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="row">
+                                @Html.ValidationMessageFor(model => model.ContactForm.Arrival)
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    @Html.LabelFor(m => m.ContactForm.Departure)
+                                </div>
+                                <div class="col">
+                                    @Html.TextBoxFor(m => m.ContactForm.Departure, "{0:dd.MM.yyyy.}", new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="row">
+                                @Html.ValidationMessageFor(model => model.ContactForm.Departure, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    @Html.LabelFor(m => m.ContactForm.Comment)
+                                </div>
+                                <div class="col">
+                                    @Html.TextBoxFor(m => m.ContactForm.Comment, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="row">
+                                @Html.ValidationMessageFor(model => model.ContactForm.Comment)
+                            </div>
+                            <div class="row">
+
+
+                            </div>
+                        </p>
+
+                    </div>
+                    <div class="card-footer">
+                        <input type="submit" value="Book now!" class="btn btn-primary" />
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!--    reviews     -->
+        @if (Model.Rating != 0 && Model.Reviews.Count() > 0)
+        {
+            <div class="col-sm-6 col-lg-3  m-2">
+                <div class="row">
+
+                    <h4>Reviews</h4>
+                    <div class="d-flex justify-content-end">
+                        @Html.Label(Model.Rating + "/5", new { @class = "badge text-bg-warning p-2 m-2", @style = "float:right;width:fit-content;" })
+                    </div>
+                    @foreach (ClassLibrary.Models.ApartmentReview review in Model.Reviews)
+                    {
+                        <div class="row text-bg-light p-2 my-1">
+                            <div class="col-10">
+                                <label style="color:dimgray; font-size:smaller;">Created at: @review.CreatedAt.ToShortDateString()</label>
+
+                                @if (review.Details != null)
+                                {
+                                    <br />
+                                    <label>@review.Details</label>
+                                }
+                            </div>
+                            <div class="col-2 d-flex justify-content-end align-items-center">
+                                <label class="badge text-bg-warning p-2" style="width:fit-content;">@review.Stars</label>
+                            </div>
+                        </div>
+
+                    }
+                </div>
+            </div>
+        }
+
+    </div>
+    <!--    pictures    -->
+    <div class="container p-2 d-flex">
+        @foreach (ClassLibrary.Models.ApartmentPicture picture in Model.Pictures)
+        {
+            <img class="m-2" src="@Url.Content(picture.Path)" alt="@picture.Name" />
+        }
+
+    </div>
+
+
+</div>
+
+@section scripts{
+    @*Google reCaptcha API Script*@
+    <script src='https://www.google.com/recaptcha/api.js' type="text/javascript"></script>
+
+}

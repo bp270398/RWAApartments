@@ -1,0 +1,87 @@
+﻿
+@{
+    ViewBag.Title = "User profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ClassLibrary.Models.User user = ViewBag.user as ClassLibrary.Models.User;
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div class="container">
+    <div class="row">
+        <div class="col p-4 border">
+            <h3>Manage profile</h3>
+            <div>
+                <table class="table table-hover m-2">
+                    <tr>
+                        <td>
+                            @Html.LabelFor(m => m.User.CreatedAt)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(m => m.User.CreatedAt)
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.LabelFor(m => m.User.Username)
+                        </td>
+                        <td>
+                            @Model.User.Username
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.LabelFor(m => m.User.Email)
+                        </td>
+                        <td>
+                            @Model.User.Email
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.LabelFor(m => m.User.PhoneNumber)
+                        </td>
+                        <td>
+                            @Model.User.PhoneNumber
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.LabelFor(m => m.User.Address)
+                        </td>
+                        <td>
+                            @Model.User.Address
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+        <div class="col p-4 border">
+            <h3>Reservations</h3>
+            <br />
+            @if (Model.Reservations.Count == 0)
+            {
+                <label>No existing reservations.</label>
+            }
+            else
+            {
+                @Html.ListBoxFor(m => m.Reservations, new SelectList(Model.Reservations))
+            }
+        </div>
+        <div class="col p-4 border">
+            <h3>Reviews</h3>
+            <br />
+            @if (Model.Reviews.Count == 0)
+            {
+                <label>No existing reviews.</label>
+            }
+            else
+            {
+                @Html.ListBoxFor(m => m.Reviews, new SelectList(Model.Reservations))
+            }
+        </div>
+
+    </div>
+</div>

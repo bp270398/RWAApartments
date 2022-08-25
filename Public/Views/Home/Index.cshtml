@@ -1,0 +1,72 @@
+﻿@model Public.Models.View_Model.ApartmentsVM
+
+@{
+    ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    SelectList ddlCities = new SelectList(
+        items: Model.Cities,
+        dataTextField: "Name",
+        dataValueField: "Id"
+        );
+}
+
+<!--    Filters -->
+<div class="container-fluid bg-light p-2">
+    <div class="container-fluid">
+        @using (Html.BeginForm(controllerName: "Home", actionName: "Index", htmlAttributes: new { id = "formFilter" }, routeValues: new { model = Model }, method: FormMethod.Get))
+        {
+
+            <div class="form-group">
+                @Html.Label(expression: "Rooms", labelText: "Rooms")
+                @Html.TextBoxFor(m => m.Rooms, htmlAttributes: new { @class = "form-control", id = "tbRooms" })
+            </div>
+            <div class="form-group">
+                @Html.Label(expression: "Adults", labelText: "Adults")
+                @Html.TextBoxFor(m => m.Adults, htmlAttributes: new { @class = "form-control", id = "tbAdults" })
+            </div>
+            <div class="form-group">
+                @Html.Label(expression: "Children", labelText: "Children")
+                @Html.TextBoxFor(m => m.Children, htmlAttributes: new { @class = "form-control", id = "tbChildren" })
+            </div>
+            <div class="form-group">
+                @Html.Label(expression: "City", labelText: "City")
+                @Html.DropDownListFor(
+                m => m.CityId,
+                    optionLabel: "---- choose ----",
+                    selectList: ddlCities,
+                    htmlAttributes: new { @class = "form-control" })
+            </div>
+            <div class="form-check m-2">
+                @Html.CheckBoxFor(m => m.IsAvailable, new { @class = "form-check-input" })
+                @Html.Label("Only availabile properties")
+            </div>
+            <div class="form-group m-2">
+                <button id="btnGo" type="submit" class="btn btn-primary m-1 px-4 ">Go!</button>
+            </div>
+        }
+    </div>
+</div>
+
+<!--    Results -->
+<div class="container-fluid">
+    <div class="card-group">
+        @foreach (Public.Models.View_Model.ApartmentVM model in Model.ApartmentVMs.Values)
+        {
+            @Html.Partial(partialViewName: "_ApartmentThumbnail", model: model);
+        }
+        @if (Model.ApartmentVMs.Count == 0)
+        {
+            <label id="lblResult" class="m-4">There are no results matching the filters. </label>
+        }
+    </div>
+</div>
+
+
+@section scripts{
+    <script>
+        $("#btnGo").on('click', function () {
+            $("#formFilter").submit();
+        });
+    </script>
+}
