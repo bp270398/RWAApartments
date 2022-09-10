@@ -134,5 +134,25 @@ namespace Administration.User_Controls
         {
             Response.Redirect(String.Format("ApartmentEditor.aspx?id={0}", Request.QueryString["id"]));
         }
+
+        protected void rPictures_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            {
+                RepeaterItem item = e.Item;
+                
+                if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+                {
+                    if((item.DataItem as ApartmentPicture).IsRepresentative.Value)
+                    {
+                        (item.FindControl("lPictureName") as Label).Visible = true;
+                    }
+                    else
+                    {
+                        (item.FindControl("lPictureName") as Label).Visible = false;
+                    }
+                }
+            }
+        }
     }
 }

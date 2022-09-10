@@ -147,7 +147,7 @@
                     <asp:Repeater ID="repApartmentPictures" runat="server">
                         <ItemTemplate>
                             <div class="card m-2" style="width:320px;">
-                                <a href="<%# Eval("Path") %>">
+                                <a href='@Url.Content(Eval("Path"))'>
                                     <asp:Image ID="imgApartmentPicture" runat="server" CssClass="card-img-top" ImageUrl='<%# Eval("Path") %>' Width="320" Height="200"  />
                                 </a>
                                 <div class="card-body">

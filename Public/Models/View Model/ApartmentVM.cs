@@ -11,6 +11,7 @@ namespace Public.Models.View_Model
         public Apartment Apartment { get; set; }
         public IEnumerable<ApartmentPicture> Pictures { get; set; }
         public IEnumerable<ApartmentReview> Reviews { get; set; }
+        public ApartmentReview NewReview { get; set; }
         public double Rating { get; set; }
         public IEnumerable<Tag> Tags { get; set; }
         public ContactForm ContactForm { get; set; }

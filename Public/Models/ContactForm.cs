@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ClassLibrary.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -58,6 +59,8 @@ namespace Public.Models
         [DataType(DataType.Text)]
         [Display(Name = "Address")]
         public string Address { get; set; }
+
+        public int ApartmentId { get; set; }
 
         public string GetDetails()
         {

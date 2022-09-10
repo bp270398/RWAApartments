@@ -63,7 +63,7 @@ namespace ClassLibrary.DAL
             SqlHelper.ExecuteNonQuery(CS, CommandType.StoredProcedure, nameof(CreateApartmentPicture), parameters);
             return (int)parameters[parameters.Length - 1].Value;
         }
-        public int CreateApartmentReservation(ApartmentReservation res)
+        public void CreateApartmentReservation(ApartmentReservation res)
         {
 
             if (res.User == null)
@@ -82,7 +82,6 @@ namespace ClassLibrary.DAL
                 parameters[parameters.Length - 1].Direction = ParameterDirection.Output;
 
                 SqlHelper.ExecuteNonQuery(CS, nameof(CreateApartmentReservation), parameters);
-                return (int)parameters[parameters.Length - 1].Value;
             }
             else
             {
@@ -100,7 +99,6 @@ namespace ClassLibrary.DAL
                 parameters[parameters.Length - 1].Direction = ParameterDirection.Output;
 
                 SqlHelper.ExecuteNonQuery(CS, nameof(CreateApartmentReservation), parameters);
-                return (int)parameters[parameters.Length - 1].Value;
             }
 
 
@@ -154,7 +152,7 @@ namespace ClassLibrary.DAL
             };
             parameters[parameters.Length - 1].Direction = ParameterDirection.Output;
             SqlHelper.ExecuteNonQuery(CS, nameof(CreateUser), parameters);
-            return (int)parameters[parameters.Length - 1].Value;
+            return int.Parse(parameters[parameters.Length - 1].ToString());
         }
         public int CreateTaggedApartment(TaggedApartment taggedApartment)
         {
@@ -168,7 +166,7 @@ namespace ClassLibrary.DAL
             SqlHelper.ExecuteNonQuery(CS, nameof(CreateTaggedApartment), taggedApartment.ApartmentId, taggedApartment.TagId, taggedApartment.Id);
             return (int)parameters[parameters.Length - 1].Value;
         }
-        public int CreateApartmentReview(ApartmentReview apartmentReview)
+        public void CreateApartmentReview(ApartmentReview apartmentReview)
         {
             SqlParameter[] parameters =
             {
@@ -179,8 +177,7 @@ namespace ClassLibrary.DAL
                 new SqlParameter("@ApartmentReviewId", SqlDbType.Int)
             };
             parameters[parameters.Length - 1].Direction = ParameterDirection.Output;
-            SqlHelper.ExecuteNonQuery(CS, nameof(CreateTaggedApartment), parameters);
-            return (int)parameters[parameters.Length - 1].Value;
+            SqlHelper.ExecuteNonQuery(CS, nameof(CreateApartmentReview), parameters);
         }
 
         /*   Delete   */
@@ -580,18 +577,18 @@ namespace ClassLibrary.DAL
         {
             SqlParameter[] parameters =
             {
-                new SqlParameter("@OwnerId",apartment.ApartmentOwner.Id),
-                new SqlParameter("@StatusId",apartment.ApartmentStatus.Id),
-                new SqlParameter("@CityId",apartment.City.Id),
-                new SqlParameter("@Address",apartment.Address),
-                new SqlParameter("@Name",apartment.Name),
-                new SqlParameter("@NameEng",apartment.NameEng),
-                new SqlParameter("@Price",apartment.Price),
-                new SqlParameter("@MaxAdults",apartment.MaxAdults),
-                new SqlParameter("@MaxChildren",apartment.MaxChildren),
-                new SqlParameter("@TotalRooms",apartment.TotalRooms),
-                new SqlParameter("@BeachDistance",apartment.BeachDistance),
-                new SqlParameter("@IDApartment",apartment.Id),
+                new SqlParameter("@OwnerId", apartment.ApartmentOwner.Id),
+                new SqlParameter("@StatusId", apartment.ApartmentStatus.Id),
+                new SqlParameter("@CityId", apartment.City.Id),
+                new SqlParameter("@Address", apartment.Address),
+                new SqlParameter("@Name", apartment.Name),
+                new SqlParameter("@NameEng", apartment.NameEng),
+                new SqlParameter("@Price", apartment.Price),
+                new SqlParameter("@MaxAdults", apartment.MaxAdults),
+                new SqlParameter("@MaxChildren", apartment.MaxChildren),
+                new SqlParameter("@TotalRooms", apartment.TotalRooms),
+                new SqlParameter("@BeachDistance", apartment.BeachDistance),
+                new SqlParameter("@IDApartment", apartment.Id),
 
             };
             SqlHelper.ExecuteNonQuery(CS, nameof(UpdateApartment), parameters);
@@ -636,7 +633,16 @@ namespace ClassLibrary.DAL
             };
             SqlHelper.ExecuteNonQuery(CS, nameof(UpdateApartmentReview), parameters);
         }
-
+        public void UpdateApartmentPicture(ApartmentPicture apartmentPicture)
+        {
+            SqlParameter[] parameters =
+                        {
+                new SqlParameter("@IDApartmentPicture", apartmentPicture.Id),
+                new SqlParameter("@Name",apartmentPicture.Name),
+                new SqlParameter("@IsRepresentative",apartmentPicture.IsRepresentative),
+            };
+            SqlHelper.ExecuteNonQuery(CS, nameof(UpdateApartmentPicture), parameters);
+        }
 
     }
 }

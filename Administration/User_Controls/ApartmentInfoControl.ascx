@@ -91,34 +91,34 @@
 
 
     <div class="row my-4">
-        <div class="col">
-            <!--    Tags    -->
-            <asp:Label runat="server" CssClass="h3" Text="Tags"></asp:Label>
-           
-            <asp:Label runat="server" ID="lInfoTags"></asp:Label><br />
+        <!--    Tags    -->
+        <asp:Label runat="server" CssClass="h3" Text="Tags"></asp:Label>
 
-            <asp:Repeater runat="server" ID="rTag">
+        <asp:Label runat="server" ID="lInfoTags" CssClass="w-100"></asp:Label>
+        <asp:Repeater runat="server" ID="rTag">
+            <ItemTemplate>
+                <asp:Label runat="server" class="badge badge-primary m-1 p-2 text-light" Text='<%#Eval("NameEng") %>' Font-Size="Medium" ></asp:Label>
+            </ItemTemplate>
+        </asp:Repeater>
+    </div>
+    <div class="row my-4">
+        <!--    Pictures    -->
+        <asp:Label runat="server" CssClass="h3" Text="Pictures"></asp:Label>
+
+        <asp:Label runat="server" ID="lInfoPictures" CssClass="w-100"></asp:Label>
+        <div class="row">
+            <asp:Repeater runat="server" ID="rPictures" OnItemDataBound="rPictures_ItemDataBound">
                 <ItemTemplate>
-                    <asp:Label runat="server" class="badge badge-primary m-1 p-2" Text='<%#Eval("NameEng") %>' Font-Size="Medium"></asp:Label>
+                    <div class="card p-0">
+                        <asp:Image runat="server" ImageUrl='<%#Eval("Path") %>' CssClass="m-0" Height="160" />
+                        <asp:Label runat="server" Text='<%#Eval("Name") %>' CssClass="m-1"></asp:Label>
+                        <asp:Label runat="server" Text="Main image" ID="lPictureName" CssClass="m-2 card-subtitle"></asp:Label>
+                    </div>
+                    
                 </ItemTemplate>
             </asp:Repeater>
         </div>
-        <div class="col">
-            <!--    Pictures    -->
-            <asp:Label runat="server" CssClass="h3" Text="Pictures"></asp:Label>
-           
-            <asp:Label runat="server" ID="lInfoPictures"></asp:Label>
-            <div class="row">
-                <asp:Repeater runat="server" ID="rPictures">
-                    <ItemTemplate>
-                        <asp:Image runat="server" ImageUrl='<%#Eval("Path") %>' CssClass="m-2" />
-                    </ItemTemplate>
-                </asp:Repeater>
-            </div>
-        </div>
-
     </div>
-
 
     <div class="row"></div>
     <!--    Actions    -->
@@ -134,7 +134,7 @@
 
 
 
-    
+
 
 
 

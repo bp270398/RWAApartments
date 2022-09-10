@@ -31,6 +31,10 @@ namespace Administration
                     var apartment = ((IRepo)Application["database"]).SelectApartment(id.Value);
                     LoadApartmentData(apartment);
                 }
+                else
+                {
+                    Response.Redirect("Error");
+                }
                 RebindApartmentOwners();
                 RebindCities();
                 RebindStatuses();
@@ -92,7 +96,6 @@ namespace Administration
             repTags.DataSource = tags;
             repTags.DataBind();
         }
-
         private Tag GetSelectedTag()
         {
             var newTag = new Tag
@@ -103,7 +106,6 @@ namespace Administration
             return newTag;
 
         }
-
         private List<Tag> GetRepeaterTags()
         {
             var repTagsItems = repTags.Items;
@@ -120,7 +122,6 @@ namespace Administration
             return tags;
 
         }
-
         protected void btnDeleteTag_Click(object sender, EventArgs e)
         {
             var tags = GetRepeaterTags();
@@ -138,6 +139,7 @@ namespace Administration
 
         protected void btnSave_Click(object sender, EventArgs e)
         {
+            //uploaded imgaes handling
             var files = SaveUploadedImagesToDisk();
             var apartmentPictures =
             files.Select(path => new ApartmentPicture
@@ -145,12 +147,15 @@ namespace Administration
                 Path = path,
                 Name = Path.GetFileNameWithoutExtension(path),
                 IsRepresentative = false,
-                
+
             }).ToList();
 
+            // create apartment if not exists
             if (Request.QueryString["id"] == null)
             {
+                //create apt
                 int apartmentId = ((IRepo)Application["database"]).CreateApartment(GetApartmentFromForm());
+                // create tags
                 GetRepeaterTags().ForEach(tag =>
                 {
                     ((IRepo)Application["database"]).CreateTaggedApartment(new TaggedApartment
@@ -159,25 +164,24 @@ namespace Administration
                         TagId = tag.Id
                     });
                 });
-                List<int> picIds = new List<int>();
+                // create pics
                 apartmentPictures.ForEach(apartmentPicture =>
                 {
                     apartmentPicture.Apartment = ((IRepo)Application["database"]).SelectApartment(apartmentId);
                     int id = ((IRepo)Application["database"]).CreateApartmentPicture(apartmentPicture);
-                    picIds.Add(id);
                 });
             }
             else
             {
-                //save Apartment
+                //update Apartment
                 Apartment apartment = GetApartmentFromForm();
                 apartment.Id = int.Parse(Request.QueryString["id"]);
                 ((IRepo)Application["database"]).UpdateApartment(apartment);
 
-                //save Tags
+                //update Tags
                 IList<Tag> oldTags = ((IRepo)Application["database"]).SelectTaggedApartment(int.Parse((Request.QueryString["id"])));
                 List<Tag> newTags = GetRepeaterTags();
-                // remove unnecessary tags
+                // delete unnecessary tags
                 oldTags.ToList().ForEach(oldTag =>
                 {
                     if (!newTags.Any(newTag => newTag.Id == oldTag.Id))
@@ -185,7 +189,7 @@ namespace Administration
                         ((IRepo)Application["database"]).DeleteTaggedApartment(apartment.Id, oldTag.Id);
                     }
                 });
-                // add new tags
+                // create new tags
                 newTags.ForEach(newTag =>
                 {
                     if (!oldTags.Any(oldTag => oldTag.Id == newTag.Id))
@@ -194,21 +198,27 @@ namespace Administration
                     }
                 });
 
-                //save Photos
+                //create Photos
                 apartmentPictures.ForEach(apartmentPicture =>
                 {
-                    List<int> picIds = new List<int>();
-
                     apartmentPicture.Apartment = ((IRepo)Application["database"]).SelectApartment(apartment.Id);
                     int id = ((IRepo)Application["database"]).CreateApartmentPicture(apartmentPicture);
-                    picIds.Add(id);
                 });
+                // delete Photos
                 List<ApartmentPicture> picturesForRemoval = new List<ApartmentPicture>();
                 GetRepeaterPictures().TryGetValue("picturesForRemoval", out picturesForRemoval);
 
                 picturesForRemoval.ForEach(picture =>
                 {
                     ((IRepo)Application["database"]).DeleteApartmentPicture(picture.Id);
+                });
+                // update Photos
+                List<ApartmentPicture> picturesForUpdate = new List<ApartmentPicture>();
+                GetRepeaterPictures().TryGetValue("pictures", out picturesForUpdate);
+
+                picturesForUpdate.ForEach(picture =>
+                {
+                    ((IRepo)Application["database"]).UpdateApartmentPicture(picture);
                 });
 
             }
@@ -270,26 +280,19 @@ namespace Administration
 
         private List<string> SaveUploadedImagesToDisk()
         {
-            string PROJECT_DIR = AppDomain.CurrentDomain.BaseDirectory;
-            string SOLUTION_DIR = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.FullName;
-            string STARTUP_PATH = HttpContext.Current.Server.MapPath("~");
-            //C:\Users\beata\Desktop\Projects\RWA\RWAApartments\ClassLibrary\
-
-            string DIR = SOLUTION_DIR + "\\ClassLibrary\\Content\\Pictures\\";
-
+            string V_DIR = "~\\Content\\Pictures\\";
             var files = new List<string>();
             if (uplImages.HasFiles)
             {
-                if (!Directory.Exists(DIR))
+                if (!Directory.Exists(V_DIR))
                 {
-                    Directory.CreateDirectory(DIR);
-
+                    Directory.CreateDirectory(Server.MapPath(V_DIR));
                 }
                 foreach (HttpPostedFile uploadedFile in uplImages.PostedFiles)
                 {
-                    var uplImagePath = Path.Combine(DIR, uploadedFile.FileName);
-                    uploadedFile.SaveAs(uplImagePath);
-                    files.Add(uplImagePath);
+                    string path = Path.Combine(V_DIR, uploadedFile.FileName);
+                    uploadedFile.SaveAs(Server.MapPath(path));
+                    files.Add(path);
                 }
             }
             return files;
@@ -307,7 +310,7 @@ namespace Administration
                 {
                     Id = int.Parse((item.FindControl("hidApartmentPictureId") as HiddenField).Value),
                     Name = (item.FindControl("txtApartmentPicture") as TextBox).Text,
-                    Path = (item.FindControl("imgApartmentPicture") as Image).ImageUrl,
+                    Path = getVirtualPathFromLocalFilePath((item.FindControl("imgApartmentPicture") as Image).ImageUrl),
                     IsRepresentative = (item.FindControl("cbIsRepresentative") as CheckBox).Checked
                 };
 
@@ -315,7 +318,7 @@ namespace Administration
                 {
                     pictures.Add(pic);
                 }
-                else
+                if ((item.FindControl("cbDelete") as CheckBox).Checked)
                 {
                     picturesForRemoval.Add(pic);
                 }
@@ -326,6 +329,15 @@ namespace Administration
                 { nameof(picturesForRemoval), picturesForRemoval }
             };
             return dict;
+        }
+
+        private string getVirtualPathFromLocalFilePath(string imageUrl)
+        {
+            
+            char DEL = '\\';
+            string[] strings = imageUrl.Split(DEL);
+            return '~' + DEL + strings[strings.Length - 3] + DEL + strings[strings.Length - 2] + DEL + strings[strings.Length - 1];
+
         }
     }
 }

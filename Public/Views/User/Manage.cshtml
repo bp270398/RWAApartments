@@ -1,4 +1,4 @@
-﻿
+﻿@model Public.Models.View_Model.UserVM
 @{
     ViewBag.Title = "User profile";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -9,6 +9,7 @@
 
 <div class="container">
     <div class="row">
+        <!--    Manage info     -->
         <div class="col p-4 border">
             <h3>Manage profile</h3>
             <div>
@@ -58,6 +59,7 @@
 
             </div>
         </div>
+        <!--    Reservations     -->
         <div class="col p-4 border">
             <h3>Reservations</h3>
             <br />
@@ -67,9 +69,30 @@
             }
             else
             {
-                @Html.ListBoxFor(m => m.Reservations, new SelectList(Model.Reservations))
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Created at</th>
+                            <th>Apartment</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (ClassLibrary.Models.ApartmentReservation res in Model.Reservations)
+                        {
+                            <tr>
+                                <td>@res.CreatedAt</td>
+                                <td>@res.Apartment.NameEng</td>
+                                <td>@res.Details</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
             }
         </div>
+        <!--    Reviews     -->
+
         <div class="col p-4 border">
             <h3>Reviews</h3>
             <br />
@@ -79,7 +102,25 @@
             }
             else
             {
-                @Html.ListBoxFor(m => m.Reviews, new SelectList(Model.Reservations))
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Created at</th>
+                            <th>Apartment</th>
+                            <th>Stars (1-5)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (ClassLibrary.Models.ApartmentReview review in Model.Reviews)
+                        {
+                            <tr>
+                                <td>@review.CreatedAt</td>
+                                <td>@review.Apartment.NameEng</td>
+                                <td>@review.Stars</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             }
         </div>
 

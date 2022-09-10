@@ -8,7 +8,7 @@
 
     <div class="display-4 text-center">Tags </div>
     <div class="container my-2">
-        <asp:Repeater runat="server" ID="repeaterTags" OnItemDataBound="repeaterTags_ItemDataBound" OnItemCommand="repeaterTags_ItemCommand">
+        <asp:Repeater runat="server" ID="repeaterTags" OnItemDataBound="repeaterTags_ItemDataBound">
             <HeaderTemplate>
                 <table id="myTable" class="table table-hover w-100">
                     <thead>
@@ -29,8 +29,9 @@
                     <td>
                         <asp:Label runat="server" Text='<%# Eval("Usage") %>' ID="Usage"></asp:Label></td>
                     <td>
-                        <asp:Button ID="btnDelete" runat="server" CommandName="DeleteTag" CommandArgument='<%# Eval("Id") %>' Text="Delete" UseSubmitBehavior="true" CssClass="btn btn-link" />
-                        <ajaxToolkit:ConfirmButtonExtender ID="ConfirmButtonExtender1" runat="server" TargetControlID="btnDelete" ConfirmText="Are you sure you want to delete this tag?" ConfirmOnFormSubmit="true" />
+                        <asp:LinkButton runat="server" ID="btnDeleteTag" OnClick="btnDeleteTag_Click" Text="Delete" CssClass="btn btn-outline-danger" ></asp:LinkButton>
+                       
+                        
                     </td>
                 </tr>
             </ItemTemplate>

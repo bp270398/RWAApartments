@@ -75,24 +75,12 @@ namespace Administration
                 int usage = int.Parse((item.FindControl("Usage") as Label).Text);
                 if (usage != 0)
                 {
-                    item.FindControl("btnDelete").Visible = false;
+                    item.FindControl("btnDeleteTag").Visible = false;
                 }
             }
         }
 
-        protected void repeaterTags_ItemCommand(object source, RepeaterCommandEventArgs e)
-        {
-            if (e.CommandName == "DeleteTag")
-            {
-                ((IRepo)Application["database"]).DeleteTag(int.Parse((string)e.CommandArgument));
-                this.AutoPostBackControl = this.FindControl("btnDelete");
-
-                string alertCommand = "alert('Tag successfully deleted.')";  // TODO: alert("Tag [TagName] succcessfully deleted");
-                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alertMessage", alertCommand, true);
-                LoadTags();
-
-            }
-        }
+        
         protected void btnOpenModalNewTagType_Click(object sender, EventArgs e)
         {
             ClientScript.RegisterStartupScript(this.GetType(), "key", "launchModal();", true);
@@ -132,6 +120,26 @@ namespace Administration
 
             tbTagNameCro.Text = "";
             tbTagNameEng.Text = "";
+        }
+
+        protected void btnDeleteTag_Click(object sender, EventArgs e)
+        {
+            List<Tag> tags = new List<Tag>();
+            foreach(RepeaterItem item in repeaterTags.Items)
+            {
+                int currentTagId = int.Parse((item.FindControl("Id") as Label).Text);
+                tags.Add(((IRepo)Application["database"]).SelectTag(currentTagId));
+            }
+            var lbSender = (LinkButton)sender;
+            var parentItem = (RepeaterItem)lbSender.Parent;
+
+            var lId = (Label)parentItem.FindControl("Id");
+            var tagId = int.Parse(lId.Text);
+            var existingTag = tags.FirstOrDefault(x => x.Id == tagId);
+            tags.Remove(existingTag);
+            ((IRepo)Application["database"]).DeleteTag(existingTag.Id);
+            LoadTags();
+
         }
     }
 }

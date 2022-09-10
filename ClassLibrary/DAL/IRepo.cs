@@ -30,7 +30,7 @@ namespace ClassLibrary.DAL
 
         /* Apartment Reservation */
         IList<ApartmentReservation> SelectApartmentReservations();
-        int CreateApartmentReservation(ApartmentReservation apartmentReservation);
+        void CreateApartmentReservation(ApartmentReservation apartmentReservation);
         ApartmentReservation SelectApartmentReservation(int apartmentReservationId);
         IList<ApartmentReservation> SelectUserReservations(int userId);
         void UpdateApartmentReservation(ApartmentReservation apartmentReservation);
@@ -49,6 +49,7 @@ namespace ClassLibrary.DAL
         /* Apartment Picture */
         IList<ApartmentPicture> SelectApartmentPictures(int apartmentId);
         int CreateApartmentPicture(ApartmentPicture apartmentPicture);
+        void UpdateApartmentPicture(ApartmentPicture apartmentPicture);
         void DeleteApartmentPicture(int id);
 
         /* Apartment Owner */
@@ -61,7 +62,7 @@ namespace ClassLibrary.DAL
         IList<ApartmentReview> SelectApartmentReviews(int apartmentId);
         IList<ApartmentReview> SelectUserReviews(int userId);
 
-        int CreateApartmentReview(ApartmentReview apartmentReview);
+        void CreateApartmentReview(ApartmentReview apartmentReview);
         void DeleteApartmentReview(int Id);
         void UpdateApartmentReview(ApartmentReview apartmentReview);
 

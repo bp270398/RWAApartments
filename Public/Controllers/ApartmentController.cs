@@ -1,5 +1,6 @@
 ﻿using ClassLibrary.DAL;
 using ClassLibrary.Models;
+using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json.Linq;
 using Public.Models.View_Model;
 using System;
@@ -16,23 +17,27 @@ namespace Public.Controllers
         readonly IRepo repo = RepoFactory.GetRepo();
         public ActionResult Apartment(int id)
         {
-            if(id == 0) { return View(viewName:"Error"); }
+            Session["aptId"] = id;
+            if(id == 0 || id.Equals(null)) { return View(viewName:"Error"); }
             ApartmentVM model = new ApartmentVM
             {
                 Apartment = repo.SelectApartment(id),
                 Tags = repo.SelectTaggedApartment(id),
                 Pictures = repo.SelectApartmentPictures(id),
                 Reviews = repo.SelectApartmentReviews(id),
+                NewReview = new ApartmentReview { Stars = 5},
                 ContactForm = new Models.ContactForm
                 {
                     Arrival = DateTime.Now,
                     Departure = DateTime.Now.AddDays(1),
                 }
             };
+            ViewBag.Id = id;
             model.Reviews = repo.SelectApartmentReviews(id);
             double rating = 0;
             model.Reviews.ToList().ForEach(r => rating += r.Stars);
-            model.Rating = rating / model.Reviews.Count();
+            model.Rating = Math.Round(rating / model.Reviews.Count(),2);
+
 
             User user = (User)Session["user"];
             if (user != null)
@@ -43,53 +48,52 @@ namespace Public.Controllers
             }
             return View(model);
         }
-        [HttpPost]
         public ActionResult ContactForm(ApartmentVM model)
         {
-            //To Validate Google recaptcha
-            var response = Request["g-recaptcha-response"];
-            string secretKey = "6Le1tgYhAAAAAHSY_BdaFc3UgMf7ysxDNr0If0eH";
-            var client = new WebClient();
-            var result = client.DownloadString(string.Format("https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}", secretKey, response));
-            var obj = JObject.Parse(result);
-            var status = (bool)obj.SelectToken("success");
-
-            //check the status is true or not
-            if (status == true)
+            if (model != null && model.ContactForm != null)
             {
-                ViewBag.Message = "Your Google reCaptcha validation success";
-                if (model != null && model.Apartment != null)
+                int aptId =int.Parse(Session["aptId"].ToString());
+                User user = (User)Session["user"];
+                ApartmentReservation res = new ApartmentReservation();
+                res.Apartment = repo.SelectApartment(aptId);
+                res.User = user ?? null;
+                res.Details = model.ContactForm.GetDetails();
+                res.UserName = model.ContactForm.FName + " " + model.ContactForm.LName;
+                res.Email = model.ContactForm.Email;
+                res.PhoneNumber = model.ContactForm.PhoneNumber;
+                res.Address = model.ContactForm.Address;
+
+                repo.CreateApartmentReservation(res);
+
+                if ((User)Session["user"] != null)
                 {
-
-                    User user = (User)Session["user"];
-                    ApartmentReservation res = new ApartmentReservation();
-                    res.Apartment = model.Apartment;
-                    res.User = user ?? null;
-                    res.Details = model.ContactForm.GetDetails();
-                    res.UserName = model.ContactForm.FName + " " + model.ContactForm.LName;
-                    res.Email = model.ContactForm.Email;
-                    res.PhoneNumber = model.ContactForm.PhoneNumber;
-                    res.Address = model.ContactForm.Address;
-
-                    repo.CreateApartmentReservation(res);
-
-                    if ((User)Session["user"] != null)
-                    {
-                        return RedirectToAction("Manage", "User");
-                    }
-                    else
-                    {
-                        return RedirectToAction("Index", "Home");
-                    }
+                    return RedirectToAction("Manage", "User");
                 }
             }
-            else
-            {
-                ViewBag.Message = "Your Google reCaptcha validation failed";
-            }
-            return View("Error");
-            //  TO DO !!
+            return RedirectToAction("Index", "Home");
 
+        }
+        public ActionResult ReviewForm(ApartmentReview model)
+        {
+            ApartmentReview apartmentReview = new ApartmentReview();
+            int aptId = int.Parse(Session["aptId"].ToString());
+            if (model != null)
+            {
+                if ((User)Session["user"] != null)
+                {
+                    apartmentReview.User = (User)Session["user"];
+                }
+                apartmentReview.Apartment = repo.SelectApartment(aptId) ?? null;
+                apartmentReview.Stars = model.Stars;
+                apartmentReview.Details = model.Details;
+                repo.CreateApartmentReview(apartmentReview);
+
+                if((User)Session["user"] != null)
+                {
+                    return RedirectToAction("Manage", "User");
+                }
+            }
+            return RedirectToAction("Apartment", aptId);
 
         }
     }
