@@ -25,19 +25,10 @@ namespace Administration
                 LoadTags();
                 LoadTagTypes();
             }
-            else
-            {
-                toggleForm(true);
-            }
+
         }
 
-        private void toggleForm(bool status)
-        {
-            tbTagNameCro.Enabled = status;
-            tbTagNameEng.Enabled = status;
-            tbTagTypeNameCro.Enabled = status;
-            tbTagTypeNameEng.Enabled = status;
-        }
+       
 
         private void LoadTagTypes()
         {
@@ -53,10 +44,7 @@ namespace Administration
                 SqlDataAdapter adapter = new SqlDataAdapter(command);
                 DataSet dataSet = new DataSet();
                 adapter.Fill(dataSet);
-                ddlTagTypes.DataTextField = dataSet.Tables[0].Columns["NameEng"].ToString();
-                ddlTagTypes.DataValueField = dataSet.Tables[0].Columns["Id"].ToString();
-                ddlTagTypes.DataSource = dataSet.Tables[0];
-                ddlTagTypes.DataBind();
+                
                 connection.Close();
             }
         }
@@ -80,48 +68,6 @@ namespace Administration
             }
         }
 
-        
-        protected void btnOpenModalNewTagType_Click(object sender, EventArgs e)
-        {
-            ClientScript.RegisterStartupScript(this.GetType(), "key", "launchModal();", true);
-        }
-
-        protected void btnOpenModalNewTag_Click(object sender, EventArgs e)
-        {
-            ClientScript.RegisterStartupScript(this.GetType(), "key", "launchModal();", true);
-        }
-
-        protected void btnAddTagType_Click(object sender, EventArgs e)
-        {
-            ((IRepo)Application["database"]).CreateTagType(new TagType()
-            {
-                Name = tbTagTypeNameCro.Text,
-                NameEng = tbTagTypeNameEng.Text
-            });
-
-            string alertCommand = "alert('Successfully inserted a new tag type: " + tbTagTypeNameEng.Text + ".')";
-            ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alertMessage", alertCommand, true);
-
-            tbTagTypeNameCro.Text = "";
-            tbTagTypeNameEng.Text = "";
-
-        }
-
-        protected void btnAddTag_Click(object sender, EventArgs e)
-        {
-            ((IRepo)Application["database"]).CreateTag(new Tag()
-            {
-                Name = tbTagNameCro.Text,
-                NameEng = tbTagNameEng.Text
-            });
-
-            string alertCommand = "alert('Successfully inserted a new tag:  " + tbTagNameEng.Text + " .')";
-            ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alertMessage", alertCommand, true);
-
-            tbTagNameCro.Text = "";
-            tbTagNameEng.Text = "";
-        }
-
         protected void btnDeleteTag_Click(object sender, EventArgs e)
         {
             List<Tag> tags = new List<Tag>();
@@ -140,6 +86,11 @@ namespace Administration
             ((IRepo)Application["database"]).DeleteTag(existingTag.Id);
             LoadTags();
 
+        }
+
+        protected void btnAddTag_Click1(object sender, EventArgs e)
+        {
+            Response.Redirect("NewTag.aspx");
         }
     }
 }

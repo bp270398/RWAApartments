@@ -125,7 +125,8 @@ namespace ClassLibrary.DAL
             };
             parameters[parameters.Length - 1].Direction = ParameterDirection.Output;
             SqlHelper.ExecuteNonQuery(CS, nameof(CreateTag), parameters);
-            return (int)parameters[parameters.Length - 1].Value;
+            int.TryParse(parameters[parameters.Length - 1].ToString(), out int id);
+            return id;
         }
         public int CreateTagType(TagType tagType)
         {
@@ -152,7 +153,8 @@ namespace ClassLibrary.DAL
             };
             parameters[parameters.Length - 1].Direction = ParameterDirection.Output;
             SqlHelper.ExecuteNonQuery(CS, nameof(CreateUser), parameters);
-            return int.Parse(parameters[parameters.Length - 1].ToString());
+            int.TryParse(parameters[parameters.Length - 1].ToString(), out int id);
+            return id;
         }
         public int CreateTaggedApartment(TaggedApartment taggedApartment)
         {
@@ -164,7 +166,8 @@ namespace ClassLibrary.DAL
             };
             parameters[parameters.Length - 1].Direction = ParameterDirection.Output;
             SqlHelper.ExecuteNonQuery(CS, nameof(CreateTaggedApartment), taggedApartment.ApartmentId, taggedApartment.TagId, taggedApartment.Id);
-            return (int)parameters[parameters.Length - 1].Value;
+            int.TryParse(parameters[parameters.Length - 1].ToString(), out int id);
+            return id;
         }
         public void CreateApartmentReview(ApartmentReview apartmentReview)
         {
@@ -275,7 +278,6 @@ namespace ClassLibrary.DAL
                 {
                     Id = (int)row[nameof(ApartmentPicture.Id)],
                     CreatedAt = DateTime.Parse(row[nameof(ApartmentPicture.CreatedAt)].ToString()),
-                    DeletedAt = Convert.IsDBNull(row[nameof(ApartmentPicture.DeletedAt)]) ? DateTime.MinValue : DateTime.Parse(row[nameof(ApartmentPicture.DeletedAt)].ToString()),
                     Apartment = SelectApartment(apartmentId),
                     Path = row[nameof(ApartmentPicture.Path)].ToString(),
                     Name = row[nameof(ApartmentPicture.Name)].ToString(),
@@ -449,6 +451,7 @@ namespace ClassLibrary.DAL
                 tagTypes.Add(
                     new TagType
                     {
+                        Id = (int)row[nameof(Tag.Id)],
                         Name = row[nameof(Tag.Name)].ToString(),
                         NameEng = row[nameof(Tag.NameEng)].ToString()
                     });

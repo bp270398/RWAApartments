@@ -31,10 +31,7 @@ namespace Administration
                     var apartment = ((IRepo)Application["database"]).SelectApartment(id.Value);
                     LoadApartmentData(apartment);
                 }
-                else
-                {
-                    Response.Redirect("Error");
-                }
+                
                 RebindApartmentOwners();
                 RebindCities();
                 RebindStatuses();

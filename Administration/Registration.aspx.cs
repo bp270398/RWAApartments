@@ -18,7 +18,7 @@ namespace Administration
             {
                 if (Session["user"] != null)
                 {
-                    Response.Redirect("Apartments.aspx");
+                    Response.Redirect("Default.aspx");
                 }
 
                 PanelForma.Visible = true;
