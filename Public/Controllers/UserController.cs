@@ -90,18 +90,11 @@ namespace Public.Controllers
             else
             {
 
-                if (repo.SelectUsers().Any(u => (u.Username == user.Username)))
-                {
-                    // Username exists
-                    Session["user"] = repo.SelectUsers().First(u => u.Username == user.Username);
-                    return RedirectToAction("Index", "Home");
-
-                }
-                else if (repo.SelectUsers().Any(u => (u.Username == user.Username) && (u.PasswordHash == user.PasswordHash)))
+                if (repo.SelectUsers().Any(u => (u.Username == user.Username) && (u.PasswordHash == Cryptography.HashPassword(user.PasswordHash))))
                 {
                     // User exists > log in
-                    Session["user"] = null;
-                    return View();
+                    Session["user"] = repo.SelectUsers().First(u => (u.Username == user.Username) && (u.PasswordHash == Cryptography.HashPassword(user.PasswordHash)));
+                    return RedirectToAction("Index", "Home");
                 }
                 else if (user.Username != null && user.PasswordHash != null)
                 {

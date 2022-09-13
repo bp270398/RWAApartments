@@ -43,8 +43,9 @@
 
         <asp:ScriptManager runat="server"></asp:ScriptManager>
         <div class="row my-4">
+             <asp:LinkButton ID="btnAddTagType" runat="server" Text="Add a new tag type" CssClass="btn btn-secondary m-1" OnClick="btnAddTagType_Click"></asp:LinkButton>
             <asp:LinkButton ID="btnAddTag" runat="server" Text="Add a new tag" CssClass="col btn btn-primary m-1" OnClick="btnAddTag_Click1"></asp:LinkButton>
-            
+           
         </div>
     </div>
 

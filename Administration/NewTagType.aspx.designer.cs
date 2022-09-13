@@ -11,34 +11,43 @@ namespace Administration
 {
 
 
-    public partial class Tags
+    public partial class NewTagType
     {
 
         /// <summary>
-        /// repeaterTags control.
+        /// tbTagTypeName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater repeaterTags;
+        protected global::System.Web.UI.WebControls.TextBox tbTagTypeName;
 
         /// <summary>
-        /// btnAddTagType control.
+        /// tbTagTypeNameEng control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton btnAddTagType;
+        protected global::System.Web.UI.WebControls.TextBox tbTagTypeNameEng;
 
         /// <summary>
-        /// btnAddTag control.
+        /// btnCancel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton btnAddTag;
+        protected global::System.Web.UI.WebControls.Button btnCancel;
+
+        /// <summary>
+        /// btnSave control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSave;
     }
 }

@@ -92,5 +92,10 @@ namespace Administration
         {
             Response.Redirect("NewTag.aspx");
         }
+
+        protected void btnAddTagType_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("NewTagType.aspx");
+        }
     }
 }

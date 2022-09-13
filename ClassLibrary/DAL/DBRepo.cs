@@ -138,7 +138,8 @@ namespace ClassLibrary.DAL
             };
             parameters[parameters.Length - 1].Direction = ParameterDirection.Output;
             SqlHelper.ExecuteNonQuery(CS, nameof(CreateTagType), parameters);
-            return (int)parameters[parameters.Length - 1].Value;
+            int.TryParse(parameters[parameters.Length - 1].ToString(), out int id);
+            return id;
         }
         public int CreateUser(User user)
         {
