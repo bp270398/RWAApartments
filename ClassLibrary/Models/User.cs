@@ -41,6 +41,7 @@ namespace ClassLibrary.Models
         [Display(Name = "Username")]
         [DataType(DataType.Text)]
         [Required(ErrorMessage = "Please enter your username.")]
+        [UsernameExists(ErrorMessage = "Username already exists.")]
         public string Username { get; set; }
 
         [Display(Name = "Password")]
