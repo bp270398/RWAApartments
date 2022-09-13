@@ -124,7 +124,6 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Login.aspx" />
-    <Content Include="NewApartment.aspx" />
     <Content Include="NewTag.aspx" />
     <Content Include="NewTagType.aspx" />
     <Content Include="Registration.aspx" />
@@ -290,13 +289,6 @@
     </Compile>
     <Compile Include="Login.aspx.designer.cs">
       <DependentUpon>Login.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="NewApartment.aspx.cs">
-      <DependentUpon>NewApartment.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="NewApartment.aspx.designer.cs">
-      <DependentUpon>NewApartment.aspx</DependentUpon>
     </Compile>
     <Compile Include="NewTag.aspx.cs">
       <DependentUpon>NewTag.aspx</DependentUpon>

@@ -66,7 +66,7 @@ namespace Public.Controllers
                 double rating = 0;
                 vm.Reviews.ToList().ForEach(r => rating += r.Stars);
                 rating = rating == 0 ? rating : rating /= vm.Reviews.Count();
-                vm.Rating = rating;
+                vm.Rating = Math.Round(rating,2);
             });
 
             return View(model);

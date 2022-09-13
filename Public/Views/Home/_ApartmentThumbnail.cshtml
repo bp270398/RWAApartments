@@ -3,7 +3,27 @@
 
 <div class="card">
     <div class="card-header">
-        <img src="@Server.MapPath(Model.Pictures.FirstOrDefault().Path)" alt="Image" />
+        @{
+            string dir = Directory.GetCurrentDirectory();
+            string dir1 = Directory.GetParent(dir).Parent.FullName;
+
+            dir = dir + "/Administration/";
+            string path;
+
+            ClassLibrary.Models.ApartmentPicture image = Model.Pictures.FirstOrDefault(p => p.IsRepresentative.Value);
+
+            if (image != null)
+            {
+                path = Path.Combine(dir, image.Path);
+            }
+            else
+            {
+                path = Path.Combine(Model.Pictures.First().Path);
+            }
+
+
+        }
+        <img src="@path" alt="Image" />
 
         <div class="d-flex justify-content-between">
             <div style="width:fit-content;">
@@ -58,7 +78,7 @@
 
     </div>
     <div class="card-footer align-items-end">
-        @Html.ActionLink(linkText:"Book now!", actionName:"Apartment", controllerName:"Apartment", routeValues: new { id = Model.Apartment.Id },htmlAttributes: new { @class = "btn btn-primary w-100" })
+        @Html.ActionLink(linkText: "Book now!", actionName: "Apartment", controllerName: "Apartment", routeValues: new { id = Model.Apartment.Id }, htmlAttributes: new { @class = "btn btn-primary w-100" })
 
     </div>
 </div>

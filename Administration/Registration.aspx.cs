@@ -81,7 +81,7 @@ namespace Administration
             sb.Append("<div class='mb-3'><label class='form-label'>Phone number: </label>");
             sb.Append($"<label class='fw-bold'>{u.PhoneNumber}</label>");
             sb.Append("</div>");
-            sb.Append($"<a href='/Apartments.aspx' class='btn btn-primary'>Continue</a>");
+            sb.Append($"<a href='/Default.aspx' class='btn btn-primary'>Continue</a>");
             sb.Append("</fieldset></div>");
 
             LiteralControl ispis = new LiteralControl(sb.ToString());
