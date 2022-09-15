@@ -204,21 +204,24 @@
                     }
                 </div>
 
-                @if (Session["user"] != null)
-                {
-                    <div class="row">
-                        <h4>Add a review</h4>
-                        
+                @{/*
+                    @if (Session["user"] != null)
+                    {
+                        <div class="row">
+                            <h4>Add a review</h4>
 
-                        @Html.Label("Review score (1-5)")
-                        @Html.TextBoxFor(m => m.NewReview.Stars, htmlAttributes: new { @class = "form-control" })
-                        @Html.Label("Review comment")
-                        @Html.TextBoxFor(m => m.NewReview.Details, htmlAttributes: new { @class = "form-control" })
 
-                        @Html.ActionLink("Submit", "ReviewForm", routeValues: Model.NewReview, new {@class="btn tbn-primary"})
-                        
-                    </div>
+                            @Html.Label("Review score (1-5)")
+                            @Html.TextBoxFor(m => m.NewReview.Stars, htmlAttributes: new { @class = "form-control" })
+                            @Html.Label("Review comment")
+                            @Html.TextBoxFor(m => m.NewReview.Details, htmlAttributes: new { @class = "form-control" })
+
+                            @Html.ActionLink("Submit", "ReviewForm", routeValues: new { model = Model.NewReview }, new { @class = "btn tbn-primary" })
+
+                        </div>
+                    */}
                 }
+
             </div>
         }
 

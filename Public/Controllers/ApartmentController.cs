@@ -73,6 +73,7 @@ namespace Public.Controllers
             return RedirectToAction("Index", "Home");
 
         }
+
         public ActionResult ReviewForm(ApartmentReview model)
         {
             ApartmentReview apartmentReview = new ApartmentReview();
